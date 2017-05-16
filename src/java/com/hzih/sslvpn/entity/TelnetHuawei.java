@@ -1,6 +1,5 @@
 package com.hzih.sslvpn.entity;
 
-import com.inetec.common.exception.Ex;
 import org.apache.commons.net.telnet.TelnetClient;
 
 import java.io.*;
@@ -20,6 +19,7 @@ public class TelnetHuawei implements Telnet {
     private static final String ENTER_COMMAND_MORE = "---- More ----";
     private static final String ENTER_LOGIN = "Username:";
     private static final String ENTER_PASSWORD = "Password:";
+    private static final String ENTER_SYMBOL = "\\[42D";
     private static final String ENTER_YN = "[Y/N]";
 
     /**
@@ -201,16 +201,16 @@ public class TelnetHuawei implements Telnet {
                 char ch = (char) i;
                  sb.append(ch);
                 if(sb.toString().endsWith(ENTER_COMMAND_ARROW)){
-                    return sb.toString().replaceAll(ENTER_COMMAND_MORE,"");
+                    return sb.toString().replaceAll(ENTER_COMMAND_MORE,"").replaceAll(ENTER_SYMBOL,"");
                 }
                  if(sb.toString().endsWith(ENTER_COMMAND_MORE)){
                      write("\n");
                  }
             }
-            return sb.toString().replaceAll(ENTER_COMMAND_MORE,"");
+            return sb.toString().replaceAll(ENTER_COMMAND_MORE,"").replaceAll(ENTER_SYMBOL,"");
         } catch (Exception e) {
            e.printStackTrace();
-            return sb.toString().replaceAll(ENTER_COMMAND_MORE,"");
+            return sb.toString().replaceAll(ENTER_COMMAND_MORE,"").replaceAll(ENTER_SYMBOL,"");
         }
     }
 
@@ -361,7 +361,7 @@ public class TelnetHuawei implements Telnet {
             telnet.connect();
             boolean flag = telnet.login();
             if (flag) {
-                String arpList = telnet.arpList();
+               /* String arpList = telnet.arpList();
                 List<ArpEntity> arpEntities = new ArrayList<ArpEntity>();
                 List<String> lines = telnet.getShellFileLine(arpList);
                 for (String s : lines) {
@@ -376,11 +376,26 @@ public class TelnetHuawei implements Telnet {
                         arpEntities.add(arpEntity);
                     }
                 }
-                System.out.println(arpEntities.size());
+                System.out.println(arpEntities.size());*/
                 //telnet.ipMacVerify("0/0/1",true,false);
                 //telnet.ipMacBind("0/0/1",true,"172.16.2.9","00e0-b610-70df",false);
-                //String dis  = telnet.disIpSourceBinding();
-                //System.out.print(dis);
+                String dis  = telnet.disIpSourceBinding();
+                System.out.print(dis);
+
+                List<ArpEntity> arpEntities = new ArrayList<ArpEntity>();
+                List<String> lines = telnet.getShellFileLine(dis);
+                for (String s : lines) {
+                    String[] cols = s.trim().split("\\s+");
+                    if (cols.length == 6 && !cols[0].equals("IP")&&!cols[0].equals("Print")) {
+                        ArpEntity arpEntity = new ArpEntity();
+                        arpEntity.setIpAddress(cols[0]);
+                        arpEntity.setMacAddress(cols[1]);
+                        arpEntity.setInet(cols[5]);
+                        arpEntities.add(arpEntity);
+                    }
+                }
+                System.out.println(arpEntities.size());
+
             }
             telnet.disconnect();
         } catch (Exception e) {

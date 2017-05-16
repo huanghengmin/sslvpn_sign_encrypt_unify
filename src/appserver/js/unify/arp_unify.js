@@ -12,6 +12,7 @@ Ext.onReady(function () {
         {name: 'inet', mapping: 'inet'},
         {name: 'vlan', mapping: 'vlan'},
         {name: 'aging', mapping: 'aging'},
+        {name: 'expire', mapping: 'expire'},
         {name: 'type', mapping: 'type'},
         {name: 'ip', mapping: 'ip'}
     ]);
@@ -45,6 +46,7 @@ Ext.onReady(function () {
         {header: "Vlan", dataIndex: "vlan", align: 'center', sortable: true, menuDisabled: true},
         {header: "网络接口", dataIndex: "inet", align: 'center', sortable: true, menuDisabled: true},
         {header: "Aging", dataIndex: "aging", align: 'center', sortable: true, menuDisabled: true},
+        {header: "Expire", dataIndex: "expire", align: 'center', sortable: true, menuDisabled: true},
         {header: "类型", dataIndex: "type", align: 'center', sortable: true, menuDisabled: true},
         {header: '操作标记', dataIndex: "flag", align: 'center', sortable: true, menuDisabled: true, renderer: show_flag, width: 100}
     ]);
@@ -105,19 +107,20 @@ function bind_unify(){
     if(!recode){
         Ext.Msg.alert("提示", "请选择一条记录!");
     }else{
-        Ext.Msg.confirm("提示", "确定删除这条记录？", function(sid) {
+        Ext.Msg.confirm("提示", "确定绑定这条记录？", function(sid) {
             if (sid == "yes") {
                 Ext.Ajax.request({
                     url : "../../UnifyAction_add.action",
                     timeout: 20*60*1000,
                     method : "POST",
                     params:{
-                        "unify.mac":recode.get("mac"),
-                        "unify.inet":recode.get("inet"),
-                        "unify.vlan":recode.get("vlan"),
-                        "unify.aging":recode.get("aging"),
-                        "unify.ip":recode.get("ip"),
-                        "unify.type":recode.get("type")
+                        "arpEntity.macAddress":recode.get("mac"),
+                        "arpEntity.inet":recode.get("inet"),
+                        "arpEntity.vlan":recode.get("vlan"),
+                        "arpEntity.aging":recode.get("aging"),
+                        "arpEntity.expire":recode.get("expire"),
+                        "arpEntity.ipAddress":recode.get("ip"),
+                        "arpEntity.type":recode.get("type")
                     },
                     success : function(r,o){
                         var respText = Ext.util.JSON.decode(r.responseText);

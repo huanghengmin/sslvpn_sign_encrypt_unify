@@ -27,6 +27,14 @@ public class UnifyAction extends ActionSupport {
     private LogService logService;
     private ArpEntity arpEntity;
 
+    public ArpEntity getArpEntity() {
+        return arpEntity;
+    }
+
+    public void setArpEntity(ArpEntity arpEntity) {
+        this.arpEntity = arpEntity;
+    }
+
     public LogService getLogService() {
         return logService;
     }
@@ -164,94 +172,124 @@ public class UnifyAction extends ActionSupport {
         if(ip!=null&&port!=null&&adm!=null&&pwd!=null) {
             if (type.equals("HuaWei")) {
                 telnet = new TelnetHuawei(ip, port, adm, pwd);
-                String re = telnet.disIpSourceBinding();
-                List<ArpEntity> arpEntities = new ArrayList<ArpEntity>();
-                List<String> lines = telnet.getShellFileLine(re);
-                for (String s : lines) {
-                    String[] cols = s.trim().split("\\s+");
-                    if (cols.length == 6 && !cols[0].equals("IP") && !cols[0].equals("Print")) {
-                        ArpEntity arpEntity = new ArpEntity();
-                        arpEntity.setIpAddress(cols[0]);
-                        arpEntity.setMacAddress(cols[1]);
-                        arpEntity.setInet(cols[5]);
-                        arpEntities.add(arpEntity);
+                if (telnet != null) {
+                    try {
+                        telnet.connect();
+                        boolean f = telnet.login();
+                        if (f) {
+                            String re = telnet.disIpSourceBinding();
+                            List<ArpEntity> arpEntities = new ArrayList<ArpEntity>();
+                            List<String> lines = telnet.getShellFileLine(re);
+                            for (String s : lines) {
+                                String[] cols = s.trim().split("\\s+");
+                                if (cols.length == 6 && !cols[0].equals("IP") && !cols[0].equals("Print")) {
+                                    ArpEntity arpEntity = new ArpEntity();
+                                    arpEntity.setIpAddress(cols[0]);
+                                    arpEntity.setMacAddress(cols[1]);
+                                    arpEntity.setInet(cols[5]);
+                                    arpEntities.add(arpEntity);
+                                }
+                            }
+
+                            String json = "{success:true,total:" + arpEntities.size() + ",rows:[";
+                            Iterator<ArpEntity> raUserIterator = arpEntities.iterator();
+                            while (raUserIterator.hasNext()) {
+                                ArpEntity log = raUserIterator.next();
+                                if (raUserIterator.hasNext()) {
+                                    json += "{" +
+                                            "mac:'" + log.getMacAddress() +
+                                            "',inet:'" + log.getInet() +
+                                            "',vlan:'" + log.getVlan() +
+                                            "',aging:'" + log.getAging() +
+                                            "',type:'" + log.getType() +
+                                            "',expire:'" +
+                                            "',ip:'" + log.getIpAddress() + "'" +
+                                            "},";
+                                } else {
+                                    json += "{" +
+                                            "mac:'" + log.getMacAddress() +
+                                            "',inet:'" + log.getInet() +
+                                            "',vlan:'" + log.getVlan() +
+                                            "',aging:'" + log.getAging() +
+                                            "',type:'" + log.getType() +
+                                            "',expire:'" +
+                                            "',ip:'" + log.getIpAddress() + "'" +
+                                            "}";
+                                }
+                            }
+                            json += "]}";
+                            actionBase.actionEnd(response, json, result);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        telnet.disconnect();
                     }
                 }
 
-                String json = "{success:true,total:" + arpEntities.size() + ",rows:[";
-                Iterator<ArpEntity> raUserIterator = arpEntities.iterator();
-                while (raUserIterator.hasNext()) {
-                    ArpEntity log = raUserIterator.next();
-                    if (raUserIterator.hasNext()) {
-                        json += "{" +
-                                "mac:'" + log.getMacAddress() +
-                                "',inet:'" + log.getInet() +
-                                "',vlan:'" + log.getVlan() +
-                                "',aging:'" + log.getAging() +
-                                "',type:'" + log.getType() +
-                                "',expire:'" +
-                                "',ip:'" + log.getIpAddress() + "'" +
-                                "},";
-                    } else {
-                        json += "{" +
-                                "mac:'" + log.getMacAddress() +
-                                "',inet:'" + log.getInet() +
-                                "',vlan:'" + log.getVlan() +
-                                "',aging:'" + log.getAging() +
-                                "',expire:'" + log.getExpire() +
-                                "',expire:'" +
-                                "',ip:'" + log.getIpAddress() + "'" +
-                                "}";
-                    }
-                }
-                json += "]}";
-                actionBase.actionEnd(response, json, result);
+
 
             } else if (type.equals("H3c")) {
                 telnet = new TelnetH3c(ip, port, adm, pwd);
-                telnet = new TelnetHuawei(ip, port, adm, pwd);
-                String re = telnet.disIpSourceBinding();
-                List<ArpEntity> arpEntities = new ArrayList<ArpEntity>();
-                List<String> lines = telnet.getShellFileLine(re);
-                for (String s : lines) {
-                    String[] cols = s.trim().split("\\s+");
-                    if (cols.length == 6 && !cols[0].equals("IP") && !cols[0].equals("Print")) {
-                        ArpEntity arpEntity = new ArpEntity();
-                        arpEntity.setIpAddress(cols[0]);
-                        arpEntity.setMacAddress(cols[1]);
-                        arpEntity.setInet(cols[5]);
-                        arpEntities.add(arpEntity);
+
+                if (telnet != null) {
+                    try {
+                        telnet.connect();
+                        boolean f = telnet.login();
+                        if (f) {
+                            String re = telnet.disIpSourceBinding();
+                            List<ArpEntity> arpEntities = new ArrayList<ArpEntity>();
+                            List<String> lines = telnet.getShellFileLine(re);
+                            for (String s : lines) {
+                                String[] cols = s.trim().split("\\s+");
+                                if (cols.length == 5) {
+                                    ArpEntity arpEntity = new ArpEntity();
+                                    arpEntity.setIpAddress(cols[0]);
+                                    arpEntity.setMacAddress(cols[1]);
+                                    arpEntity.setInet(cols[2]);
+                                    arpEntity.setVlan(cols[3]);
+                                    arpEntity.setType(cols[4]);
+                                    arpEntities.add(arpEntity);
+                                }
+                            }
+
+                            String json = "{success:true,total:" + arpEntities.size() + ",rows:[";
+                            Iterator<ArpEntity> raUserIterator = arpEntities.iterator();
+                            while (raUserIterator.hasNext()) {
+                                ArpEntity log = raUserIterator.next();
+                                if (raUserIterator.hasNext()) {
+                                    json += "{" +
+                                            "mac:'" + log.getMacAddress() +
+                                            "',inet:'" + log.getInet() +
+                                            "',vlan:'" + log.getVlan() +
+                                            "',aging:'" + log.getAging() +
+                                            "',type:'" + log.getType() +
+                                            "',expire:'" +
+                                            "',ip:'" + log.getIpAddress() + "'" +
+                                            "},";
+                                } else {
+                                    json += "{" +
+                                            "mac:'" + log.getMacAddress() +
+                                            "',inet:'" + log.getInet() +
+                                            "',vlan:'" + log.getVlan() +
+                                            "',aging:'" + log.getAging() +
+                                            "',expire:'" + log.getExpire() +
+                                            "',expire:'" +
+                                            "',ip:'" + log.getIpAddress() + "'" +
+                                            "}";
+                                }
+                            }
+                            json += "]}";
+                            actionBase.actionEnd(response, json, result);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        telnet.disconnect();
                     }
                 }
 
-                String json = "{success:true,total:" + arpEntities.size() + ",rows:[";
-                Iterator<ArpEntity> raUserIterator = arpEntities.iterator();
-                while (raUserIterator.hasNext()) {
-                    ArpEntity log = raUserIterator.next();
-                    if (raUserIterator.hasNext()) {
-                        json += "{" +
-                                "mac:'" + log.getMacAddress() +
-                                "',inet:'" + log.getInet() +
-                                "',vlan:'" + log.getVlan() +
-                                "',aging:'" + log.getAging() +
-                                "',type:'" + log.getType() +
-                                "',expire:'" +
-                                "',ip:'" + log.getIpAddress() + "'" +
-                                "},";
-                    } else {
-                        json += "{" +
-                                "mac:'" + log.getMacAddress() +
-                                "',inet:'" + log.getInet() +
-                                "',vlan:'" + log.getVlan() +
-                                "',aging:'" + log.getAging() +
-                                "',expire:'" + log.getExpire() +
-                                "',expire:'" +
-                                "',ip:'" + log.getIpAddress() + "'" +
-                                "}";
-                    }
-                }
-                json += "]}";
-                actionBase.actionEnd(response, json, result);
+
             }
 
         }
@@ -273,7 +311,6 @@ public class UnifyAction extends ActionSupport {
         if (ip != null && port != null && adm != null && pwd != null) {
             if (type.equals("HuaWei")) {
                 telnet = new TelnetHuawei(ip, port, adm, pwd);
-
                 try {
                     telnet.connect();
                     boolean flag = telnet.login();
@@ -313,7 +350,7 @@ public class UnifyAction extends ActionSupport {
                                         "',inet:'" + log.getInet() +
                                         "',vlan:'" + log.getVlan() +
                                         "',aging:'" + log.getAging() +
-                                        "',expire:'" + log.getExpire() +
+                                        "',type:'" + log.getType() +
                                         "',expire:'" +log.getExpire()+
                                         "',ip:'" + log.getIpAddress() + "'" +
                                         "}";
@@ -328,6 +365,7 @@ public class UnifyAction extends ActionSupport {
                     telnet.disconnect();
                 }
             } else if (type.equals("H3c")) {
+                telnet = new TelnetH3c(ip, port, adm, pwd);
                 try {
                     telnet.connect();
                     boolean flag = telnet.login();
@@ -345,6 +383,7 @@ public class UnifyAction extends ActionSupport {
                                 arpEntity.setInet(cols[3]);
                                 arpEntity.setAging(cols[4]);
                                 arpEntity.setType(cols[5]);
+                                unifies.add(arpEntity);
                             }
                         }
                         String json = "{success:true,total:" + unifies.size() + ",rows:[";

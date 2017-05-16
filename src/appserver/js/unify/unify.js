@@ -22,12 +22,13 @@ Ext.onReady(function () {
     });*/
     var record = new Ext.data.Record.create([
         {name: 'mac', mapping: 'mac'},
-        {name: 'id', mapping: 'id'},
+        //{name: 'id', mapping: 'id'},
         //{name: 'status', mapping: 'status'},
         {name: 'inet', mapping: 'inet'},
         {name: 'vlan', mapping: 'vlan'},
         {name: 'aging', mapping: 'aging'},
-        {name: 'type', mapping: 'type'},
+        {name: 'expire', mapping: 'aging'},
+        {name: 'type', mapping: 'expire'},
         {name: 'ip', mapping: 'ip'}
     ]);
     var proxy = new Ext.data.HttpProxy({
@@ -36,7 +37,7 @@ Ext.onReady(function () {
     var reader = new Ext.data.JsonReader({
         totalProperty: "total",
         root: "rows",
-        id: 'id'
+        id: 'mac'
     }, record);
 
 
@@ -60,6 +61,7 @@ Ext.onReady(function () {
         {header: "Vlan", dataIndex: "vlan", align: 'center', sortable: true, menuDisabled: true},
         {header: "网络接口", dataIndex: "inet", align: 'center', sortable: true, menuDisabled: true},
         {header: "Aging", dataIndex: "aging", align: 'center', sortable: true, menuDisabled: true},
+        {header: "Expire", dataIndex: "expire", align: 'center', sortable: true, menuDisabled: true},
         {header: "类型", dataIndex: "type", align: 'center', sortable: true, menuDisabled: true},
         //{header:"状态", dataIndex:"status", align:'center',sortable:true, menuDisabled:true,renderer:show_enabled},
         {header: '操作标记', dataIndex: "flag", align: 'center', sortable: true, menuDisabled: true, renderer: show_flag, width: 100}
@@ -500,13 +502,21 @@ function delete_private(){
     if(!recode){
         Ext.Msg.alert("提示", "请选择一条记录!");
     }else{
-        Ext.Msg.confirm("提示", "确定删除这条记录？", function(sid) {
+        Ext.Msg.confirm("提示", "确定解绑这条记录？", function(sid) {
             if (sid == "yes") {
                 Ext.Ajax.request({
                     url : "../../UnifyAction_remove.action",
                     timeout: 20*60*1000,
                     method : "POST",
-                    params:{id:recode.get("id")},
+                    params:{
+                        "arpEntity.macAddress":recode.get("mac"),
+                        "arpEntity.inet":recode.get("inet"),
+                        "arpEntity.vlan":recode.get("vlan"),
+                        "arpEntity.aging":recode.get("aging"),
+                        "arpEntity.expire":recode.get("expire"),
+                        "arpEntity.type":recode.get("type"),
+                        "arpEntity.ipAddress":recode.get("ip")
+                    },
                     success : function(r,o){
                         var respText = Ext.util.JSON.decode(r.responseText);
                         var msg = respText.msg;

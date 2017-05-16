@@ -114,8 +114,8 @@ public class TelnetH3c implements Telnet{
         }else {
             write("interface Ethernet "+ethernet);
         }*/
-        msg=readUntil(ENTER_COMMAND_BRACKETS);
-        System.out.print(msg);
+        /*msg=readUntil(ENTER_COMMAND_BRACKETS);
+        System.out.print(msg);*/
         write("dis ip source binding");
         result=readUntil(ENTER_COMMAND_BRACKETS);
         System.out.print(result);
