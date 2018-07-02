@@ -46,6 +46,7 @@
         <mapping resource="com/hzih/sslvpn/domain/xml/BackUp.hbm.xml"/>
         <!--<mapping resource="com/hzih/sslvpn/domain/xml/TrustTerminal.hbm.xml"/>-->
         <mapping resource="com/hzih/sslvpn/domain/xml/EquipmentLog.hbm.xml"/>
+        <mapping resource="com/hzih/sslvpn/domain/xml/Threea.hbm.xml"/>
         <!--<mapping resource="com/hzih/sslvpn/domain/xml/Nat.hbm.xml"/>-->
        <!-- <mapping resource="com/hzih/sslvpn/domain/xml/Unify.hbm.xml"/>-->
     </session-factory>

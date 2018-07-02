@@ -79,7 +79,8 @@
                 expanded: false
             });
             var menu_root_node_11 = new Ext.tree.TreeNode({
-                text: '系统监控',
+                text: '3A监控',
+                //text: '系统监控',
                 expanded: false
             });
             var menu_root_node_12 = new Ext.tree.TreeNode({
@@ -360,6 +361,7 @@
             });
 
 
+
             <lbs:access code="SECOND_CYPZ">
             menu_root_node_9.appendChild(mrn_9_1);
             </lbs:access>
@@ -379,6 +381,10 @@
             <lbs:access code="SECOND_SJPZ">
             menu_root_node_9.appendChild(mrn_9_5);
             </lbs:access>
+
+            <%--<lbs:access code="SECOND_SJPZ">--%>
+            <%--menu_root_node_9.appendChild(mrn_9_6);--%>
+            <%--</lbs:access>--%>
 
             var mrn_10_1 = new Ext.tree.TreeNode({
                 id: 'mrn_10_1',
@@ -411,19 +417,27 @@
             menu_root_node_10.appendChild(mrn_10_3);
             </lbs:access>
 
-            var mrn_11_1 = new Ext.tree.TreeNode({
+           var mrn_11_1 = new Ext.tree.TreeNode({
                 id: 'mrn_11_1',
                 text: '主机监控',
                 leaf: true,
                 url: 'pages/monitor/monitor_system.jsp'
             });
 
-            var mrn_11_2 = new Ext.tree.TreeNode({
+            /* var mrn_11_2 = new Ext.tree.TreeNode({
                 id: 'mrn_11_2',
                 text: '监控报警',
                 leaf: true,
                 url: 'pages/host/manager_device.jsp'
             });
+*/
+            var mrn_11_2 = new Ext.tree.TreeNode({
+                id: 'mrn_11_2',
+                text: '3A配置',
+                leaf: true,
+                url: 'pages/threea/switchConfiguration.jsp'
+            });
+
 
             <lbs:access code="SECOND_ZJJK">
             menu_root_node_11.appendChild(mrn_11_1);
@@ -690,7 +704,7 @@
                 border: false, 				//是否显示边框
                 collapsible: false, 		//是否可以收缩,默认不可以收缩，即不显示收缩箭头
                 height: 86,
-                html:'<div id="top" style="border:1px solid #564b47;background-color:#fff;height:55;width:100%;background-image: url(img/topVPN_CX.jpg);">' +
+                html:'<div id="top" style="border:1px solid #564b47;background-color:#fff;height:55;width:100%;background-image: url(img/topTYVPN_CX.jpg);">' +
                 '<div style="height:55;border:0 solid #564b47;float:right;width:400px;margin:0px 0px 0px 0px;background-image: url(img/top_1.png);">' +
                 '</div>' +
                 '</div>',
@@ -810,7 +824,8 @@
                     </lbs:access>
                     <lbs:access code="TOP_JKGL" >
                     {
-                        title: '监控管理',
+                        //title: '监控管理',
+                        title: '3A管理',
                         border: false,
                         iconCls: 'monitor',
                         bodyStyle: 'border-bottom: 1px solid;padding-top: 5px;padding-left: 15px;',

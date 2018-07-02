@@ -187,6 +187,7 @@
     <!--<bean id="trustTerminalDao" class="com.hzih.sslvpn.dao.impl.TrustTerminalDaoImpl" parent="daoTemplate"/>-->
     <bean id="sourceNetDao" class="com.hzih.sslvpn.dao.impl.SourceNetDaoImpl" parent="daoTemplate"/>
     <bean id="equipmentLogDao" class="com.hzih.sslvpn.dao.impl.EquipmentLogDaoImpl" parent="daoTemplate"/>
+    <bean id="threeaDao" class="com.hzih.sslvpn.dao.impl.ThreeaDaoImpl" parent="daoTemplate"/>
     <!--<bean id="natDao" class="com.hzih.sslvpn.dao.impl.NatDaoImpl" parent="daoTemplate"/>-->
   <!--  <bean id="unifyDao" class="com.hzih.sslvpn.dao.impl.UnifyDaoImpl" parent="daoTemplate"/>-->
 
@@ -618,6 +619,10 @@
 
     <bean class="com.hzih.sslvpn.web.action.unify.UnifyConfigAction" id="UnifyConfigAction">
         <property name="logService" ref="logService"/>
+    </bean>
+
+    <bean class="com.hzih.sslvpn.web.action.threea.ThreeaAction" id="ThreeaAction">
+        <property name="threeaDao" ref="threeaDao"/>
     </bean>
 
 

@@ -48,7 +48,8 @@ IMG {
 
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/js/ext/resources/css/ext-all.css"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/js/ext/resources/css/ext-all-notheme.css"/>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/js/ext/resources/css/xtheme-access.css"/>
+<%--<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/js/ext/resources/css/xtheme-access.css"/>--%>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/js/ext/resources/css/xtheme-blue.css"/>
 <%--<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/js/ext/resources/css/yourtheme.css"/>--%>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/ext-patch.css"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/icon.css"/>

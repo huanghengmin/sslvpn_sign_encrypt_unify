@@ -63,7 +63,7 @@
     background: url(img/login.png) no-repeat;">--%>
 <div style="width: 800px; height: 450px; border: 1px solid #01162b;
             margin-left:auto;margin-right:auto;margin-top: 5%;
-            background: url(img/loginVPN_CX.jpg) no-repeat;"
+            background: url(img/loginTYVPN_CX.jpg) no-repeat;"
         >
     <div style="margin-left:auto;margin-right:auto;margin-top:220px;border: 0px solid #acd67a;
                 /*width: 400px;*/

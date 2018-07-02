@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class table="threed" name="com.hzih.sslvpn.domain.Threea">
+    <id access="field" name="id" type="int" column="id" length="20">
+      <generator class="increment"/>
+    </id>
+    <property name="ip" length="20" column="ip" access="field" type="string"/>
+    <property name="port" length="20" column="port" access="field" type="int"/>
+    <property name="lowermode" length="20" column="lowermode" access="field" type="string"/>
+  </class>
+</hibernate-mapping>
